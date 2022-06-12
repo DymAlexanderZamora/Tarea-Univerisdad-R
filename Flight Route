@@ -1,0 +1,84 @@
+# Código de Vuelo
+
+# Libreria de mapas
+library(maps)
+
+# Margen
+par(mar=c(15,15,15,15))
+
+#              Mapa-Mundi
+map('world',
+    col="#111111", fill=TRUE, bg="white", lwd=0.5,
+    mar=rep(0,4),border=0, ylim=c(-150,150) 
+)
+
+# Libreria Dplyr para los datos de wrangling y pipe function
+library(dplyr)
+
+# Ciudades        (Longitud, Latitud)
+
+Moscu<- c(36.8251409,55.5807481)
+Buenos_aires<- c(-58.5768248,-34.6157397)
+Peredmistne<- c(34.6157397,45.9494196)
+Kiev<- c(29.9584461,50.4006221)
+Jima<- c(36.8251409,7.6750109)
+
+
+#                 Data frame
+data <- rbind(Buenos_aires,Kiev,Peredmistne,Jima,Moscu) %>% 
+  as.data.frame()
+colnames(data) <- c("long","lat")
+
+#          Mostrar Ciudades como Puntitos
+map('world',
+    col="#111111", fill=TRUE, bg="white", lwd=0.5,
+    mar=rep(0,4),border=0, ylim=c(-150,150) 
+)
+points(x=data$long, y=data$lat, col="red", cex=1, pch=20)
+
+# Libreria geosphere
+library(geosphere)
+
+#                   Mapa Mundi
+map('world',
+    col="#111111", fill=TRUE, bg="white", lwd=0.5,
+    mar=rep(0,4),border=0, ylim=c(-80,80) 
+)
+
+#               Punto de las Ciudades
+
+points(x=data$long, y=data$lat, col="red", cex=1, pch=20)
+
+#               Calcular Conecciones
+
+# Entre  Buenos Aires y Kiev
+inter <- gcIntermediate(Buenos_aires,Kiev, n=50, addStartEnd=TRUE, breakAtDateLine=F)
+
+# Entre  Kiev y Peredmistne
+inter <- gcIntermediate(Kiev,Peredmistne, n=50, addStartEnd=TRUE, breakAtDateLine=F)
+
+# Entre  Peredmistne   y Jima
+inter <- gcIntermediate(Peredmistne,Jima, n=50, addStartEnd=TRUE, breakAtDateLine=F)
+
+# Entre  Jima       y Moscu
+inter <- gcIntermediate(Jima,Moscu, n=50, addStartEnd=TRUE, breakAtDateLine=F)
+
+#              Mostrar Recorrido de Conecciones(lineas)
+
+lines(inter, col="slateblue", lwd=1)
+
+# Entre  Buenos Aires y Kiev
+inter <- gcIntermediate(Buenos_aires,Kiev, n=50, addStartEnd=TRUE, breakAtDateLine=F)             
+lines(inter, col="slateblue", lwd=1)
+
+# Entre  Kiev y Peredmistne
+inter <- gcIntermediate(Kiev,Peredmistne, n=50, addStartEnd=TRUE, breakAtDateLine=F)             
+lines(inter, col="slateblue", lwd=1)
+
+# Entre  Peredmistne   y Jima
+inter <- gcIntermediate(Peredmistne,Jima, n=50, addStartEnd=TRUE, breakAtDateLine=F)             
+lines(inter, col="slateblue", lwd=1)
+
+# Entre  Jima       y Moscu
+inter <- gcIntermediate(Jima,Moscu, n=50, addStartEnd=TRUE, breakAtDateLine=F)             
+lines(inter, col="slateblue", lwd=1)
